@@ -3,6 +3,7 @@ import subprocess
 import threading
 import time
 from rtsp_stream_processor import RTSPStreamProcessor
+from logger import logger
 
 
 def main():
@@ -20,6 +21,7 @@ def main():
     )
     processing_thread.start()
     processing_thread.join()
+    RTSPStreamProcessor.write_logs()
     # time.sleep(5)
 
 
