@@ -2,8 +2,9 @@ import datetime
 
 
 class logger:
-    def __init__(self):
+    def __init__(self, log_file_path):
         self.log_entries = []
+        self.log_file = open(log_file_path, "w")
 
     def log_event(self, frame_number, coordinates):
         """Logs an event with the given type and data."""
@@ -13,12 +14,9 @@ class logger:
             "frame_number": frame_number,
             "coordinates": f"({coordinates[0]}, {coordinates[1]}, {coordinates[2]}, {coordinates[3]})",
         }
-        self.log_entries.append(log_entry)
+        self.log_file.write(log_entry)
+        self.log_file.flush()
 
-    def _write_logs_to_file(self):
-        with open("fire_detection_log.txt", "w") as file:
-            for entry in self.log_entries:
-                file.write(
-                    f"{entry['timestamp']} - Frame {entry['frame_number']}: Fire detected at {entry['coordinates']}\n"
-                )
-        print("Logs have been written to fire_detection_log.txt.")
+    def _cleanup(self):
+        if self.log_file:
+            self.log_file.close()

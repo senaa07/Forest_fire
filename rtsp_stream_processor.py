@@ -21,7 +21,7 @@ class RTSPStreamProcessor:
         self.cap = cv2.VideoCapture(source_rtsp_url)
         self.ffmpeg_process = None
         self.frame_number = 0
-        self.logger = logger()
+        self.logger = logger("fire_detection_log.txt")
 
         if not self.cap.isOpened():
             raise ValueError("Error: Could not open the source RTSP stream.")
@@ -83,7 +83,7 @@ class RTSPStreamProcessor:
             colorCode[1],
             1,
         )
-        self.logger(frame, [10, 20, 30, 40])
+        self.logger.log_event(frame, [10, 20, 30, 40])
 
     def process_and_stream(self):
         """Processes video frames from the source RTSP and streams them to the target RTSP.
@@ -114,6 +114,4 @@ class RTSPStreamProcessor:
         if self.ffmpeg_process:
             self.ffmpeg_process.stdin.close()
             self.ffmpeg_process.wait()
-
-
-# End of rtsp_stream_processor.py
+            self.logger._cleanup()
